@@ -1,6 +1,6 @@
 ﻿# API maestro-detalle
 
-La conexión utiliza exclusivamente `my-app/.env`. El módulo `lib/db.mjs` mantiene un pool compartido. Las consultas usan parámetros y las rutas ejecutan en Node.js.
+La conexión utiliza `my-app/.env` en desarrollo y variables del entorno en producci?n. El módulo `lib/db.mjs` mantiene un pool compartido. Las consultas usan parámetros y las rutas ejecutan en Node.js.
 
 ## GET /api/misiones
 
@@ -65,3 +65,13 @@ La página principal contiene el formulario de carnet, nombre, correo y estados 
 Después de guardar se consultan nuevamente catálogo y estudiantes. Si falla esa actualización, el mensaje distingue que el registro ya se guardó y permite reintentar la consulta. Editar recupera los datos y estados existentes; el carnet permanece fijo durante la edición. Buscar filtra por nombre, carnet y correo.
 
 Pruebas de navegador: npm.cmd run test:ui (Microsoft Edge). Si ya tienes el servidor abierto, establece $env:API_BASE_URL='http://localhost:3000'. Las pruebas interceptan la API para comprobar guardado, errores, actualización del tablero, edición, catálogo vacío y ancho móvil sin escribir en la base de datos real.
+
+## Despliegue en Vercel
+
+Configurar DB_HOST, DB_PORT, DB_USER, DB_PASSWORD y DB_NAME en el entorno del despliegue (Production o Preview). DB_ENCRYPT tiene true por defecto; DB_TRUST_SERVER_CERTIFICATE tiene false por defecto. Para el servidor autofirmado usado en desarrollo, configurar explícitamente DB_TRUST_SERVER_CERTIFICATE=true si ese mismo servidor es el destino.
+
+En el panel escribir la contraseña real, sin comillas envolventes ni escapes añadidos para dotenv: un dólar literal se escribe $, no \$. Producción conserva el valor recibido sin expandirlo.
+
+Publicar el código corregido y crear un nuevo deployment. No subir .env a Git. Verificar GET /api/misiones. Si sigue fallando, revisar los logs de esa función: DB_CONFIG_MISSING/DB_CONFIG_INVALID indica configuración (se registra solo el nombre de la variable); ELOGIN indica autenticación; ESOCKET/ETIMEOUT requiere revisar certificado y conectividad del servidor. Una conexión local exitosa no confirma acceso desde Vercel.
+
+Referencia: https://vercel.com/docs/environment-variables
