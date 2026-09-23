@@ -6,14 +6,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:inspect": "node --conditions=react-server scripts/inspect-db.mjs",
+    "test": "node --conditions=react-server --test tests/*.test.mjs",
+    "test:db": "node --conditions=react-server scripts/test-db.mjs",
+    "test:ui": "playwright test"
   },
   "dependencies": {
+    "dotenv": "^18.0.3",
+    "dotenv-expand": "^1000.0.0",
+    "mssql": "^12.7.2",
     "next": "16.3.6",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1",
+    "swagger-ui-dist": "^5.33.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
