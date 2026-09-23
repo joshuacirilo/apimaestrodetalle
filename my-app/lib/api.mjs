@@ -12,7 +12,7 @@ export function errorResponse(error) {
     return Response.json({ error: 'El correo ya pertenece a otro estudiante o el registro está duplicado.' }, { status: 409 });
   }
   if (number === 1205) return Response.json({ error: 'Conflicto entre registros simultáneos. Reintenta la solicitud.' }, { status: 409 });
-  console.error('Error de base de datos.', { code: error?.code, number });
+  console.error('Error de base de datos.', { code: error?.code, number, ...(error?.code?.startsWith('DB_CONFIG_') ? { variable: error.variable } : {}) });
   return Response.json({ error: 'No se pudo completar la operación.' }, { status: 500 });
 }
 
