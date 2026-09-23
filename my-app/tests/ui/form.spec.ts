@@ -28,15 +28,17 @@ test('guarda, refresca el avance, edita y maneja errores sin perder datos', asyn
   await expect(page.getByRole('checkbox', { name: /Lectura/ })).toBeChecked();
   conflict = true;
   await page.getByRole('button', { name: 'Guardar cambios' }).click();
-  await expect(page.getByRole('alert')).toContainText('El correo ya pertenece');
+  await expect(page.locator('main').getByRole('alert')).toContainText('El correo ya pertenece');
   await expect(page.getByLabel('Nombre completo')).toHaveValue('Ana Prueba');
   conflict = false; refreshFails = true;
   await page.getByRole('button', { name: 'Guardar cambios' }).click();
   await expect(page.getByRole('status')).toContainText('El registro se guardó, pero');
   refreshFails = false;
   await page.getByRole('button', { name: 'Reintentar' }).click();
-  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.locator('main').getByRole('alert')).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/tablero-desktop.png', fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: 'test-results/tablero-mobile.png', fullPage: true });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 test('permite recuperar una carga fallida y muestra catálogo vacío', async ({ page }) => {
@@ -44,7 +46,7 @@ test('permite recuperar una carga fallida y muestra catálogo vacío', async ({ 
   await page.route('**/api/misiones', route => route.fulfill(failed ? { status: 500, json: {} } : { json: [] }));
   await page.route('**/api/estudiantes', route => route.fulfill({ json: [] }));
   await page.goto('/');
-  await expect(page.getByRole('alert')).toBeVisible();
+  await expect(page.locator('main').getByRole('alert')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Guardar estudiante' })).toBeDisabled();
   failed = false;
   await page.getByRole('button', { name: 'Reintentar' }).click();

@@ -57,3 +57,11 @@ Abrir http://localhost:3000/api-docs. Expandir una operación, pulsar **Try it o
 La especificación OpenAPI se sirve en /api/openapi. Los archivos de Swagger UI se sirven localmente desde la dependencia swagger-ui-dist, sin CDN ni validador externo.
 
 Las entradas SQL se envían con .input(nombre, tipo, valor) y marcadores @carnet, @nombre, @correo, @id y @estado. No se concatenan valores del JSON en el SQL. Los GET son consultas fijas sin entradas del usuario. La prueba test:db verifica que un nombre con comillas y texto SQL se conserva literalmente, dentro de una transacción que se revierte.
+
+## Frontend
+
+La página principal contiene el formulario de carnet, nombre, correo y estados de misiones obtenidas de la API. El tablero muestra estudiantes, sus misiones y avance: completadas / total del catálogo × 100 (0% si el catálogo está vacío). El resumen del grupo usa el total de estudiantes y misiones disponibles.
+
+Después de guardar se consultan nuevamente catálogo y estudiantes. Si falla esa actualización, el mensaje distingue que el registro ya se guardó y permite reintentar la consulta. Editar recupera los datos y estados existentes; el carnet permanece fijo durante la edición. Buscar filtra por nombre, carnet y correo.
+
+Pruebas de navegador: npm.cmd run test:ui (Microsoft Edge). Si ya tienes el servidor abierto, establece $env:API_BASE_URL='http://localhost:3000'. Las pruebas interceptan la API para comprobar guardado, errores, actualización del tablero, edición, catálogo vacío y ancho móvil sin escribir en la base de datos real.
