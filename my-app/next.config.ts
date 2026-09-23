@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  outputFileTracingIncludes: {
+    '/api-docs/assets/*': ['./node_modules/swagger-ui-dist/swagger-ui.css', './node_modules/swagger-ui-dist/swagger-ui-bundle.js'],
+  },
 };
 
 export default nextConfig;
